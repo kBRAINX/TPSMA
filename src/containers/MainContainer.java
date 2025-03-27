@@ -8,6 +8,10 @@ import jade.util.leap.Properties;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.ControllerException;
 
+/**
+ * Conteneur principal pour le système de bibliothèque.
+ * Lance l'agent observateur.
+ */
 public class MainContainer {
     public static void main(String[] args) {
         try {

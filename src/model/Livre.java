@@ -3,14 +3,17 @@ package model;
 import java.io.Serializable;
 
 public class Livre implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String titre;
     private String auteur;
-    private double prix;
+    private int quantiteDisponible;
+    private int dureeEmpruntMax; // en jours
 
-    public Livre(String titre, String auteur, double prix) {
+    public Livre(String titre, String auteur, int quantiteDisponible, int dureeEmpruntMax) {
         this.titre = titre;
         this.auteur = auteur;
-        this.prix = prix;
+        this.quantiteDisponible = quantiteDisponible;
+        this.dureeEmpruntMax = dureeEmpruntMax;
     }
 
     public String getTitre() {
@@ -21,16 +24,35 @@ public class Livre implements Serializable {
         return auteur;
     }
 
-    public double getPrix() {
-        return prix;
+    public int getQuantiteDisponible() {
+        return quantiteDisponible;
     }
 
-    public void setPrix(double prix) {
-        this.prix = prix;
+    public void setQuantiteDisponible(int quantiteDisponible) {
+        this.quantiteDisponible = quantiteDisponible;
+    }
+
+    public int getDureeEmpruntMax() {
+        return dureeEmpruntMax;
+    }
+
+    public boolean estDisponible() {
+        return quantiteDisponible > 0;
+    }
+
+    public boolean estDisponible(int nombreExemplaires) {
+        return quantiteDisponible >= nombreExemplaires;
+    }
+
+    public void reduireQuantite(int nombre) {
+        if (quantiteDisponible >= nombre) {
+            quantiteDisponible -= nombre;
+        }
     }
 
     @Override
     public String toString() {
-        return "Livre [titre=" + titre + ", auteur=" + auteur + ", prix=" + prix + "]";
+        return "Livre [titre=" + titre + ", auteur=" + auteur + ", exemplaires disponibles=" + quantiteDisponible +
+            ", durée d'emprunt max=" + dureeEmpruntMax + " jours]";
     }
 }

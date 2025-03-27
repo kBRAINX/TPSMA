@@ -9,16 +9,21 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+/**
+ * ObservateurAgent - Agent de surveillance (agent réactif complexe)
+ * Architecture: Réactive avec état
+ * Objectif: Observer et enregistrer les interactions entre la bibliothécaire et les utilisateurs
+ */
 public class ObservateurAgent extends Agent {
     private static final long serialVersionUID = 1L;
-    private LibrairieGUI gui;
+    private BibliothequeGUI gui;
 
     @Override
     protected void setup() {
         System.out.println("Agent observateur démarré");
 
         // Initialisation de la GUI
-        gui = LibrairieGUI.getInstance();
+        gui = BibliothequeGUI.getInstance();
         gui.setVisible(true);
 
         // S'enregistrer comme observateur
@@ -53,16 +58,16 @@ public class ObservateurAgent extends Agent {
     }
 
     private void saluerAgentsExistants() {
-        // Rechercher des vendeurs
+        // Rechercher la bibliothécaire
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("vente-livres");
+        sd.setType("service-bibliotheque");
         template.addServices(sd);
 
         try {
             DFAgentDescription[] result = DFService.search(this, template);
             for (DFAgentDescription agent : result) {
-                gui.ajouterVendeur(agent.getName().getLocalName());
+                gui.ajouterBibliothecaire(agent.getName().getLocalName());
 
                 ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                 msg.addReceiver(agent.getName());
@@ -86,23 +91,23 @@ public class ObservateurAgent extends Agent {
                 String sender = msg.getSender().getLocalName();
                 String content = msg.getContent();
 
-                if (content.startsWith("VENDEUR_NOUVEAU:")) {
-                    gui.ajouterVendeur(sender);
+                if (content.startsWith("BIBLIO_NOUVEAU:")) {
+                    gui.ajouterBibliothecaire(sender);
                 }
-                else if (content.startsWith("ACHETEUR_NOUVEAU:")) {
-                    String livre = content.substring("ACHETEUR_NOUVEAU:".length()).trim();
-                    gui.ajouterAcheteur(sender, livre);
+                else if (content.startsWith("USER_NOUVEAU:")) {
+                    String info = content.substring("USER_NOUVEAU:".length()).trim();
+                    gui.ajouterUtilisateur(sender, info);
                 }
-                else if (content.startsWith("ACHETEUR_FIN:")) {
-                    gui.supprimerAcheteur(sender);
+                else if (content.startsWith("USER_FIN:")) {
+                    gui.supprimerUtilisateur(sender);
                 }
-                else if (content.startsWith("VENDEUR_INFO:")) {
-                    String info = content.substring("VENDEUR_INFO:".length()).trim();
-                    gui.miseAJourVendeur(sender, info);
+                else if (content.startsWith("BIBLIO_INFO:")) {
+                    String info = content.substring("BIBLIO_INFO:".length()).trim();
+                    gui.miseAJourBibliothecaire(sender, info);
                 }
-                else if (content.startsWith("ACHETEUR_INFO:")) {
-                    String info = content.substring("ACHETEUR_INFO:".length()).trim();
-                    gui.miseAJourAcheteur(sender, info);
+                else if (content.startsWith("USER_INFO:")) {
+                    String info = content.substring("USER_INFO:".length()).trim();
+                    gui.miseAJourUtilisateur(sender, info);
                 }
                 else if (content.startsWith("TRANSACTION:")) {
                     String transaction = content.substring("TRANSACTION:".length()).trim();
