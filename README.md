@@ -154,23 +154,16 @@ Le système démarre une simulation où différents types d'utilisateurs interag
 4. Un utilisateur avec liste recherche plusieurs livres avec un seuil d'utilité élevé
 5. Un utilisateur simple recherche un livre non disponible
 
-## Lancement depuis l'interface GUI de JADE
+## Lancement du projet
 
 Pour démarrer le système depuis l'interface graphique de JADE :
 
 1. Lancez le Main Container JADE :
+```cmd
+  executer le programme main du projet
 ```
-java -cp jade.jar jade.Boot -gui
-```
+cela declanchera toutes les interfaces graphiques suivis des differents agents du systeme
 
-2. Cliquez sur "Start New Agent" dans l'interface RMA
-3. Créez les agents dans l'ordre suivant :
-    - Agent "observateur" de la classe "gui.ObservateurAgent"
-    - Agent "bibliothecaire" de la classe "agents.Bibliothecaire"
-    - Agents utilisateurs de l'une des classes suivantes :
-        - "agents.UserSimple" avec l'argument du titre du livre
-        - "agents.UserEmprunteur" avec les arguments du titre et du nombre d'exemplaires
-        - "agents.UserListe" avec l'argument de la liste des titres
 
 ## Extensions possibles
 
